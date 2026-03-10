@@ -1,0 +1,184 @@
+@import "tailwindcss";
+
+:root {
+  --bg-dark: #0a0a0a;
+  --neon-green: #00ff41;
+  --accent-green: #39ff14;
+  --dark-green: #003b00;
+  --panel-bg: #0d0d0d;
+  --panel-border: #0a3d00;
+  --text-dim: #4a7a4a;
+}
+
+@theme {
+  --color-bg-dark: #0a0a0a;
+  --color-neon-green: #00ff41;
+  --color-accent-green: #39ff14;
+  --color-dark-green: #003b00;
+  --color-panel-bg: #0d0d0d;
+  --color-panel-border: #0a3d00;
+  --color-text-dim: #4a7a4a;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--neon-green);
+  font-family: 'JetBrains Mono', monospace;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #003b00;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00ff41;
+}
+
+/* Glow utilities */
+.text-glow {
+  text-shadow: 0 0 7px #00ff41, 0 0 10px #00ff41, 0 0 21px #00ff41;
+}
+
+.text-glow-sm {
+  text-shadow: 0 0 4px #00ff4180, 0 0 8px #00ff4140;
+}
+
+.box-glow {
+  box-shadow: 0 0 5px #00ff4130, 0 0 10px #00ff4115, inset 0 0 5px #00ff4108;
+}
+
+.box-glow-strong {
+  box-shadow: 0 0 8px #00ff4150, 0 0 16px #00ff4125, inset 0 0 8px #00ff4110;
+}
+
+/* Scanline overlay */
+.scanlines::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 255, 65, 0.015) 2px,
+    rgba(0, 255, 65, 0.015) 4px
+  );
+}
+
+/* Blinking cursor animation */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.blink {
+  animation: blink 1s steps(1) infinite;
+}
+
+/* Blinking dot for panel headers */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* Active dot */
+.active-dot {
+  animation: pulse-dot 0.6s ease-in-out infinite;
+  box-shadow: 0 0 6px #00ff41;
+}
+
+/* Run button pulse */
+@keyframes run-pulse {
+  0%, 100% { box-shadow: 0 0 5px #00ff4140, 0 0 10px #00ff4120; }
+  50% { box-shadow: 0 0 15px #00ff4180, 0 0 30px #00ff4140, 0 0 45px #00ff4120; }
+}
+
+.run-pulse {
+  animation: run-pulse 1.5s ease-in-out infinite;
+}
+
+/* Processing dots animation */
+@keyframes dot-bounce {
+  0%, 80%, 100% { opacity: 0.2; }
+  40% { opacity: 1; }
+}
+
+/* CodeMirror overrides */
+.cm-editor {
+  height: 100% !important;
+  background: transparent !important;
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+.cm-editor .cm-scroller {
+  font-family: 'JetBrains Mono', monospace !important;
+  overflow: auto !important;
+}
+
+.cm-editor .cm-content {
+  caret-color: #00ff41 !important;
+}
+
+.cm-editor .cm-cursor {
+  border-left-color: #00ff41 !important;
+  border-left-width: 2px !important;
+}
+
+.cm-editor.cm-focused {
+  outline: none !important;
+}
+
+.cm-editor .cm-gutters {
+  background: transparent !important;
+  border-right: 1px solid #003b0040 !important;
+  color: #003b00 !important;
+}
+
+.cm-editor .cm-activeLineGutter {
+  background: #00ff4108 !important;
+  color: #00ff4180 !important;
+}
+
+.cm-editor .cm-activeLine {
+  background: #00ff4108 !important;
+}
+
+/* Line highlight for execution */
+.execution-line {
+  background: linear-gradient(90deg, #00ff4118, transparent) !important;
+  box-shadow: inset 3px 0 0 #00ff41;
+}
