@@ -18,6 +18,7 @@ function App() {
     currentLine,
     runProgram,
     aiEnabled,
+    reset,
   } = useProteus()
 
   const isTranslating = phase === 'translating' || phase === 'parsing'
@@ -25,7 +26,7 @@ function App() {
 
   return (
     <div className="scanlines h-screen w-screen flex flex-col overflow-hidden" style={{ background: '#0a0a0a' }}>
-      <Header phase={phase} onRun={runProgram} aiEnabled={aiEnabled} />
+      <Header phase={phase} onRun={runProgram} aiEnabled={aiEnabled} onReset={reset} />
 
       <main
         className="flex-1 grid gap-2 p-2 min-h-0"

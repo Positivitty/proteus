@@ -25,7 +25,7 @@ function ProcessingDots() {
   )
 }
 
-export default function Header({ phase, onRun, aiEnabled }) {
+export default function Header({ phase, onRun, aiEnabled, onReset}) {
   const isRunning = phase !== 'idle' && phase !== 'complete'
   const label = phaseLabels[phase] || 'READY'
 
@@ -94,6 +94,22 @@ export default function Header({ phase, onRun, aiEnabled }) {
         >
           {isRunning ? '/// RUNNING' : '\u25B6 RUN PROGRAM'}
         </motion.button>
+          
+
+        {/* CLEAR button */}
+          <motion.button
+            onClick={onReset}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-5 py-2 text-sm font-bold tracking-wider border rounded cursor-pointer transition-colors duration-200 hover:bg-[#003b00]/50"
+            style={{
+              color: '#00ff41',
+              borderColor: '#00ff41',
+              backgroundColor: 'transparent',
+            }}
+          >
+            CLEAR
+          </motion.button>
       </div>
     </motion.header>
   )
