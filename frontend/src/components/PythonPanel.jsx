@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import PanelWrapper from './PanelWrapper'
 
@@ -53,13 +54,17 @@ function TypewriterLine({ text, lineNum, isCurrent }) {
 }
 
 function highlightPython(code) {
-  const keywords = ['def', 'return', 'if', 'else', 'elif', 'for', 'while', 'in', 'import', 'from', 'class', 'print', 'range', 'len', 'True', 'False', 'None', 'and', 'or', 'not', 'with', 'as', 'try', 'except', 'finally', 'break', 'continue', 'pass', 'lambda', 'yield']
+  const keywords = [
+    'def','return','if','else','elif','for','while','in','import','from',
+    'class','print','range','len','True','False','None','and','or','not',
+    'with','as','try','except','finally','break','continue','pass',
+    'lambda','yield'
+  ]
 
   const parts = []
   let remaining = code
 
   while (remaining.length > 0) {
-    // Match strings
     const stringMatch = remaining.match(/^(["'])(?:(?!\1).)*\1/)
     if (stringMatch) {
       parts.push(
@@ -71,7 +76,6 @@ function highlightPython(code) {
       continue
     }
 
-    // Match numbers
     const numMatch = remaining.match(/^\b\d+(?:\.\d+)?\b/)
     if (numMatch) {
       parts.push(
@@ -83,10 +87,10 @@ function highlightPython(code) {
       continue
     }
 
-    // Match keywords
     const wordMatch = remaining.match(/^\b[a-zA-Z_]\w*\b/)
     if (wordMatch) {
       const word = wordMatch[0]
+
       if (keywords.includes(word)) {
         parts.push(
           <span key={parts.length} style={{ color: '#39ff14', fontWeight: 'bold' }}>
@@ -100,11 +104,11 @@ function highlightPython(code) {
           </span>
         )
       }
+
       remaining = remaining.slice(word.length)
       continue
     }
 
-    // Match comments
     const commentMatch = remaining.match(/^#.*$/)
     if (commentMatch) {
       parts.push(
@@ -116,7 +120,6 @@ function highlightPython(code) {
       continue
     }
 
-    // Operators and punctuation
     parts.push(
       <span key={parts.length} style={{ color: '#4a7a4a' }}>
         {remaining[0]}
@@ -129,8 +132,45 @@ function highlightPython(code) {
 }
 
 export default function PythonPanel({ pythonCode, currentLine, active }) {
+
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = async () => {
+    if (pythonCode.length === 0) return
+
+    try {
+      await navigator.clipboard.writeText(pythonCode.join('\n'))
+
+      setCopied(true)
+
+      setTimeout(() => {
+        setCopied(false)
+      }, 2000)
+
+    } catch (err) {
+      console.error("Clipboard copy failed:", err)
+    }
+  }
+
   return (
     <PanelWrapper title="Generated Python Code" delay={0.2} active={active}>
+
+      {/* Copy Button */}
+      <div className="flex justify-end mb-2">
+        <button
+          onClick={handleCopy}
+          disabled={pythonCode.length === 0}
+          className="text-xs px-2 py-1 border rounded transition-colors duration-200"
+          style={{
+            color: '#00ff41',
+            borderColor: '#00ff41',
+            opacity: pythonCode.length === 0 ? 0.5 : 1
+          }}
+        >
+          {copied ? 'COPIED!' : 'COPY'}
+        </button>
+      </div>
+
       <div className="h-full overflow-auto">
         {pythonCode.length === 0 ? (
           <div className="flex items-center justify-center h-full">
@@ -151,6 +191,7 @@ export default function PythonPanel({ pythonCode, currentLine, active }) {
           </AnimatePresence>
         )}
       </div>
+
     </PanelWrapper>
   )
 }
