@@ -1,12 +1,16 @@
+import { useState } from 'react'
 import Header from './components/Header'
 import HumanTerminal from './components/HumanTerminal'
 import PythonPanel from './components/PythonPanel'
 import VariableMemory from './components/VariableMemory'
 import OutputConsole from './components/OutputConsole'
 import ExplanationPanel from './components/ExplanationPanel'
+import CommandReference from './components/CommandReference'
 import { useProteus } from './hooks/useProteus'
 
 function App() {
+  const [showCommandReference, setShowCommandReference] = useState(false)
+
   const {
     englishCode,
     setEnglishCode,
@@ -24,8 +28,21 @@ function App() {
   const isExecuting = phase === 'executing'
 
   return (
-    <div className="scanlines h-screen w-screen flex flex-col overflow-hidden" style={{ background: '#0a0a0a' }}>
+    <div className="scanlines relative h-screen w-screen flex flex-col overflow-hidden" style={{ background: '#0a0a0a' }}>
       <Header phase={phase} onRun={runProgram} aiEnabled={aiEnabled} />
+
+      <button
+        type="button"
+        onClick={() => setShowCommandReference(true)}
+        className="absolute top-20 right-4 z-40 px-3 py-1.5 text-xs font-bold tracking-wider border rounded transition-colors duration-150 hover:bg-[#003b00]/50"
+        style={{
+          color: 'var(--neon-green)',
+          borderColor: 'var(--neon-green)',
+          background: '#0d0d0d',
+        }}
+      >
+        COMMANDS
+      </button>
 
       <main
         className="flex-1 grid gap-2 p-2 min-h-0"
@@ -60,6 +77,10 @@ function App() {
           active={output.length > 0}
         />
       </main>
+
+      {showCommandReference && (
+        <CommandReference onClose={() => setShowCommandReference(false)} />
+      )}
     </div>
   )
 }
